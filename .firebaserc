@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "darex-e0bdd"
+  },
+  "targets": {
+    "darex-e0bdd": {
+      "hosting": {
+        "admin": [
+          "darex-admin"
+        ]
+      }
+    }
+  }
+}

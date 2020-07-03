@@ -1,0 +1,45 @@
+#main_screen {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+#main_welcome {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+  padding: 0px;
+  margin: 0px;
+  flex-wrap: wrap;
+  position: absolute;
+}
+.main_carousel {
+  width: 50%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.main_signup_signin {
+  width: 50%;
+  height: 100vh;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+@media (max-width: 1024px) {
+  .main_carousel {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  .main_signup_signin {
+    width: 100%;
+    height: 100vh;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
