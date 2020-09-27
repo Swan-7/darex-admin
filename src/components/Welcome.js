@@ -45,36 +45,9 @@ export default function Welcome() {
     });
   }, []);
   return (
-    <div id="main_screen">
-      <div id="main_welcome">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "#fff",
-          }}
-          className="main_carousel"
-        >
-          <img
-            style={{
-              width: "100%",
-            }}
-            src={require("./assets/undraw_laravel_and_vue_59tp.png")}
-          />
-        </div>
-        <div className="main_signup_signin">
-          {/* {option && (
-            <SignUp
-              windowDimensions={windowDimensions}
-              signIn={() => {
-                setOption(false);
-                // history.push("/dashboard");
-                console.log(location);
-              }}
-            />
-          // )} */}
-
+    <div>
+      <div>
+        <div>
           <SignIn
             windowDimensions={windowDimensions}
             signUp={() => {

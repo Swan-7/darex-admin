@@ -37,6 +37,8 @@ import {
   faSignOutAlt,
   faProcedures,
   faVials,
+  faPills,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
 import MenuIcon from "@material-ui/icons/Menu";
@@ -47,10 +49,8 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import HomeIcon from "@material-ui/icons/Home";
 import Home from "./Home/Home";
 
-import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+
 import MoreIcon from "@material-ui/icons/MoreVert";
 import {
   BrowserRouter as Router,
@@ -70,6 +70,8 @@ import Appointment from "./DocAppoint/DocAppoint";
 import Doctors from "./Doctors/Doctors";
 import Therapy from "./Therapy/Therapy";
 import TestScan from "./Test&Scan/TestScan";
+import Pharmacy from "./Pharmacy/Pharmacy";
+import Patients from "./Patients/Patients";
 const drawerWidth = "240px";
 
 function ElevationScroll(props) {
@@ -280,22 +282,6 @@ export default function Main({ match }) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem> */}
       <MenuItem
         onClick={() => {
           history.push(`${match.url}/profile`, { docID: docID });
@@ -430,11 +416,12 @@ export default function Main({ match }) {
           <Divider />
           <List>
             {[
-              "Symptoms & Signs",
-              "Doc Appointment",
+              "Patients",
+              // "Doc Appointment",
               "Doctors",
               "Therapy",
               "Test & Scan",
+              "Pharmacy",
             ].map((text, index) => (
               <ListItem
                 button
@@ -447,7 +434,7 @@ export default function Main({ match }) {
                   //   history.push(`${match.url}`, { docID: docID });
                   // }
                   setIconColor(index);
-                  if (text === "Symptoms & Signs") {
+                  if (text === "Patients") {
                     history.push(`${match.url}`, {
                       docID: docID,
                     });
@@ -476,6 +463,12 @@ export default function Main({ match }) {
                       createAppointment: false,
                     });
                   }
+                  if (text === "Pharmacy") {
+                    history.push(`${match.url}/pharmacy`, {
+                      docID: docID,
+                      createAppointment: false,
+                    });
+                  }
                 }}
               >
                 <ListItemIcon>
@@ -484,7 +477,7 @@ export default function Main({ match }) {
                     )} */}
                   {index === 0 && (
                     <FontAwesomeIcon
-                      icon={faHeadSideCough}
+                      icon={faUsers}
                       style={{ fontSize: 20 }}
                       color={"#00AFEF"}
                     />
@@ -517,22 +510,18 @@ export default function Main({ match }) {
                       style={{ fontSize: 20 }}
                     />
                   )}
+                  {index === 5 && (
+                    <FontAwesomeIcon
+                      color={"#00AFEF"}
+                      icon={faPills}
+                      style={{ fontSize: 20 }}
+                    />
+                  )}
                 </ListItemIcon>
                 <ListItemText primary={text} />
               </ListItem>
             ))}
           </List>
-          {/* <Divider />
-          <List>
-            {["All mail", "Trash", "Spam"].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <HomeIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List> */}
         </Drawer>
       </div>
 
@@ -639,7 +628,13 @@ export default function Main({ match }) {
               <Home />
             </Route> */}
             <Route exact path={`${match.path}`}>
-              <Symptoms
+              {/* <Symptoms
+                userData={userData}
+                windowDimensions={windowDimensions}
+                docID={docID}
+                match={match}
+              /> */}
+              <Patients
                 userData={userData}
                 windowDimensions={windowDimensions}
                 docID={docID}
@@ -679,6 +674,22 @@ export default function Main({ match }) {
             </Route>
             <Route path={`${match.path}/testscan`}>
               <TestScan
+                userData={userData}
+                windowDimensions={windowDimensions}
+                docID={docID}
+                match={match}
+              />
+            </Route>
+            <Route path={`${match.path}/pharmacy`}>
+              <Pharmacy
+                userData={userData}
+                windowDimensions={windowDimensions}
+                docID={docID}
+                match={match}
+              />
+            </Route>
+            <Route path={`${match.path}/patients`}>
+              <Patients
                 userData={userData}
                 windowDimensions={windowDimensions}
                 docID={docID}
