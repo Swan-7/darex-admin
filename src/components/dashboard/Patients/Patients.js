@@ -59,6 +59,10 @@ export default function Patients(props) {
   }, [props.windowDimensions]);
   //modals
   const [medicalHistory, setmedicalHistory] = useState(false);
+  const [prescriptionModal, setPrescriptionModal] = useState(false);
+  //prescription
+  const [drugcount, setdrugcount] = useState(1);
+  const [drug, setdrug] = useState("");
   //conditions
   const [conditionsRelatives, setconditionsRelatives] = useState([]);
   const [conditionsRelative, setconditionsRelative] = useState("");
@@ -105,6 +109,38 @@ export default function Patients(props) {
   const [response, setResponse] = useState(false);
   const [symptomID, setSymptomID] = useState(null);
   const [, setState] = useState({});
+  //prescrition table patient
+  const [patientPrescritpion, setPatientPrescritpion] = useState([]);
+  const [prescritionLoading, setPrescriptionLoading] = useState(true);
+  useEffect(() => {
+    if (prescriptionModal) {
+      setPrescriptionLoading(true);
+      firebase
+        .firestore()
+        .collection("prescriptions")
+        .where("userID", "==", userID)
+        .onSnapshot(
+          (snapshots) => {
+            let initial = [];
+            if (snapshots.empty) {
+              setPatientPrescritpion([]);
+              setPrescriptionLoading(false);
+              console.log("empty");
+            } else {
+              snapshots.forEach((snap) => {
+                initial.push(snap.data());
+              });
+              setPatientPrescritpion(initial);
+              setPrescriptionLoading(false);
+            }
+          },
+          (error) => {
+            console.log(error);
+            setPrescriptionLoading(false);
+          }
+        );
+    }
+  }, [prescriptionModal]);
   useEffect(() => {
     console.log("Response effect", response);
   }, [response]);
@@ -236,9 +272,9 @@ export default function Patients(props) {
                         to: "Watch",
                       },
                       {
-                        title: "Prescription",
+                        title: "DH+ Dispensary & Medical Delivery",
                         image: require("../../assets/dashboard/icons8-hand_with_a_pill.png"),
-                        to: "Watch",
+                        to: "prescription",
                       },
                       {
                         title: "Diet & Fitness Plan",
@@ -246,10 +282,15 @@ export default function Patients(props) {
                         to: "Watch",
                       },
                       {
-                        title: "Dare-X",
+                        title: "DR. Afar",
                         image: require("../../assets/dashboard/icons8-video_conference.png"),
                         to: "Watch",
                       },
+                      // {
+                      //   title: "Prescription",
+                      //   image: require("../../assets/dashboard/icons8-video_conference.png"),
+                      //   to: "Watch",
+                      // },
                     ].map((item, index) => {
                       return (
                         <div
@@ -284,16 +325,9 @@ export default function Patients(props) {
                                 );
                               }
                             }
-
-                            // medicalHistory: {
-                            //   conditionsImmediateRelatives: conditionsRelatives,
-                            //   symptomsCurrentlyExperiencing: currentSymptoms,
-                            //   currentMedications: currentMedications,
-                            //   allergies: allergies,
-                            //   useOrHistoryOfTobacco: tobacco,
-                            //   useOrHistoryofIllegalDrugs: illegal,
-                            //   consumeAlcohol: alcohol,
-                            // },
+                            if (item.to === "prescription") {
+                              setPrescriptionModal(true);
+                            }
                           }}
                           key={index}
                           style={{
@@ -341,6 +375,144 @@ export default function Patients(props) {
           }}
         />
       </div>
+      <Backdrop
+        open={prescriptionModal}
+        style={{
+          width: "100vw",
+          height: "100vh",
+          zIndex: 9999,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: "#fff",
+            display: "flex",
+            width: "90%",
+            height: "90%",
+            padding: 20,
+            flexDirection: "column",
+            overflowY: "scroll",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "relative",
+          }}
+        >
+          <FontAwesomeIcon
+            onClick={() => {
+              setdrug("");
+              setdrugcount(1);
+              setPrescriptionModal(false);
+            }}
+            color={"#00AFEF"}
+            icon={faTimes}
+            style={{
+              fontSize: 20,
+              marginLeft: "auto",
+              position: "absolute",
+              top: 20,
+              right: 20,
+            }}
+          />
+          <div style={{ flexDirection: "column", display: "flex" }}>
+            <span style={{ fontSize: 20, marginBottom: 20 }}>
+              Prescription for patient
+            </span>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span>Drug</span>
+              <TextField
+                onChange={(value) => {
+                  setdrug(value.target.value);
+                }}
+                value={drug}
+                placeholder="Drug name"
+              />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span>Count</span>
+              <TextField
+                type="number"
+                onChange={(value) => {
+                  setdrugcount(value.target.value);
+                }}
+                value={drugcount}
+                placeholder="count"
+              />
+            </div>
+            <Button
+              onClick={() => {
+                if (drug.length > 1 && drugcount > 0) {
+                  setupdateLoading(true);
+                  firebase
+                    .firestore()
+                    .collection("prescriptions")
+                    .doc()
+                    .set({
+                      drug: drug,
+                      count: drugcount,
+                      createdAt: new Date().getTime(),
+                      userID: userID,
+                    })
+                    .then(() => {
+                      alert("upload successful");
+                      setdrug("");
+                      setdrugcount(1);
+                    })
+                    .catch((error) => {
+                      setupdateLoading(false);
+                      alert("An error occurred");
+                    });
+                } else {
+                  alert("provide inputs");
+                }
+              }}
+              disabled={updateLoading}
+              variant="contained"
+              style={{
+                marginTop: 20,
+                width: "45%",
+                backgroundColor: "#00528E",
+                color: "#fff",
+                fontWeight: "bold",
+              }}
+            >
+              Update
+            </Button>
+          </div>
+
+          <div
+            style={{
+              // overflowY: "scroll",
+              // width: "100vw",
+              flexGrow: 1,
+              display: "flex",
+              marginTop: 30,
+              maxHeight: "80vh",
+            }}
+          >
+            <MaterialTable
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                flexGrow: 1,
+                maxHeight: "100%",
+                boxShadow: "0px 10px 20px rgba(0,175,239,0.19)",
+              }}
+              title="Prescritpions"
+              isLoading={prescritionLoading}
+              columns={[
+                { title: "Drug", field: "drug" },
+                { title: "Count", field: "count" },
+              ]}
+              data={patientPrescritpion}
+              options={{
+                actionsColumnIndex: -1,
+              }}
+            />
+          </div>
+        </div>
+      </Backdrop>
       <Backdrop
         open={medicalHistory}
         style={{

@@ -384,6 +384,9 @@ export default function TestScan(props) {
                   "MICROBIOLOGY",
                   "DNA TESTING",
                   "PCR-XPERT TEST",
+                  "IMAGING",
+                  "HISTOPATHOLOGY",
+                  "PARASITOLOGY",
                 ].map((item, index) => {
                   return (
                     <MenuItem value={item} key={index}>

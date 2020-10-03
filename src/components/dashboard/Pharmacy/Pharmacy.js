@@ -154,7 +154,7 @@ export default function Pharmacy(props) {
     <div id="main">
       <div style={{ width: "100%" }}>
         <MaterialTable
-          title="Pharmacy"
+          title="DH+ DISPENSARY & MEDICAL DELIVERY"
           columns={[
             // {
             //   title: "#",
@@ -187,7 +187,7 @@ export default function Pharmacy(props) {
               onClick: (event) => {
                 setResponse(true);
                 setEdit(false);
-                setFirstName("");
+                setFirstName(0);
                 setLastName("");
                 setMedium("");
                 setAuthorised(true);

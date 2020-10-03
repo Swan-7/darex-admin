@@ -175,7 +175,7 @@ export default function Therapy(props) {
     <div id="main">
       <div style={{ width: "100%" }}>
         <MaterialTable
-          title="Therapy Catalog"
+          title="DH+ THERAPY"
           columns={[
             {
               title: "#",

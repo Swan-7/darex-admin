@@ -510,6 +510,8 @@ export default function Profile(props) {
                         });
                     });
                   });
+                } else {
+                  alert("Check the fields");
                 }
               }}
               disabled={loading}
